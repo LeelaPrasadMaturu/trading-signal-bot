@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Trading Signals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .buy-yes {
+            color: green;
+            font-weight: bold;
+        }
+        .buy-no {
+            color: red;
+            font-weight: bold;
+        }
+        .tick {
+            color: green;
+        }
+        .cross {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Trading Signals</h1>
+        <button onclick="regenerateSignals()">Regenerate Signals</button>
+        <table>
+            <tr>
+                <th>Symbol</th>
+                <th>Buy Signal</th>
+                <th>Indicators Met</th>
+                <th>Probability</th>
+                <th>Timestamp</th>
+            </tr>
+            {% for signal in signals %}
+            <tr>
+                <td>{{ signal.symbol }}</td>
+                <td class="{% if signal.buy_signal %}buy-yes{% else %}buy-no{% endif %}">{{ signal.buy_signal }}</td>
+                <td>
+                    {% if signal.MA_condition or signal.RSI_condition or signal.MACD_condition or signal.Volume_condition %}
+                        {% if signal.MA_condition %}&#x2713;{% endif %} MA
+                        {% if signal.RSI_condition %}&#x2713;{% endif %} RSI
+                        {% if signal.MACD_condition %}&#x2713;{% endif %} MACD
+                        {% if signal.Volume_condition %}&#x2713;{% endif %} Volume
+                    {% else %}
+                        &#x2717; None
+                    {% endif %}
+                </td>
+                
+                
+                
+                <td>{{ signal.probability }}</td>
+                <td>{{ signal.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <script>
+        function regenerateSignals() {
+            fetch('/generate_signals')
+                .then(response => response.json())
+                .then(data => {
+                    location.reload();
+                });
+        }
+    </script>
+</body>
+</html>
